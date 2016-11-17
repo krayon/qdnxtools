@@ -21,4 +21,84 @@ completely disconnected from the original parent (ie, your shell).
 
 Think //[[https://linux.die.net/man/1/nohup|nohup(1)]]// on steroids.
 
+{{{
+fork v0.03
+Copyright (C) 2016 Todd Harbour
+https://gitlab.com/krayon/qdnxtools/
+
+Spawns a process that's COMPLETELY disconnected from the original parent process
+
+Usage: fork -h|--help
+       fork -V|--version
+       fork [--] <program> [<args> [...]]
+
+-h|--help               - Displays this help
+-V|--version            - Displays fork version
+
+[--]                    - Indicates all remaining parameters are for <program>
+<program>               - Program to run
+<args> [...]            - Any arguments to pass to <program>
+
+Example: fork youtube-dl https://www.youtube.com/watch?v=dQw4w9WgXcQ
+}}}
+
+=== urlencode.bash ===
+
+URL Encoder
+{{{
+URL Encode (urlencode) v0.01
+http://gitlab.com/krayon/qdnxtools/urlencode.bash
+
+
+URL Encode (urlencode) encodes a URL, obeying RFC3986 (similar to PHP's rawurlencode)
+
+Usage: urlencode.bash -h|--help
+       urlencode.bash -V|--version
+       urlencode.bash [-v|--verbose] [-f|--filepath] [-a|--all] [--] [-|<URL>]
+
+-h|--help           - Displays this help
+-V|--version        - Displays the program version
+-v|--verbose        - Displays extra debugging information.  This is the same
+                      as setting DEBUG=1 in your config.
+-f|--filepath       - Informs urlencode.bash that the URL(s) are file paths and urlencode.bash
+                      will therefore not encode '/'.
+-a|--all            - Informs urlencode.bash that you want ALL characters encoded, not
+                      just those required by RFC3986 (-f|--filepath will still
+                      be obeyed).
+<URL>               - The URL to encode. If no text is specified, or <URL>
+                      is "-" (minus/hyphen), then the URL(s) will be read from
+                      stdin
+
+Example: urlencode.bash "http://www.google.com.au/search?btnI&q=youtube dQw4w9WgXcQ"
+}}}
+
+=== E-mail Obfuscate ===
+
+E-mail Obfuscater
+{{{
+E-mail Obfuscate (emailobfuscate) v0.01
+http://gitlab.com/krayon/qdnxtools/emailobfuscate.bash
+
+
+E-mail Obfuscate (emailobfuscate) obfuscates an email URI link using encoded 2 byte hex characters.
+Anecdotally these don't seem to be picked up as much by spammers' email address
+gathering web scrapers.
+
+Usage: emailobfuscate.bash -h|--help
+       emailobfuscate.bash -V|--version
+       emailobfuscate.bash [-v|--verbose] [-n|--nolink] [--] [-|<ADDY>]
+
+-h|--help           - Displays this help
+-V|--version        - Displays the program version
+-v|--verbose        - Displays extra debugging information.  This is the same
+                      as setting DEBUG=1 in your config.
+-n|--nolink         - Don't output an HTML mailto: link, only the address
+                      encoded.
+<ADDY>              - The email address to encode. If no text is specified, or
+                      <ADDY> is "-" (minus/hyphen), then the address(es) will be
+                      read from stdin
+
+Example: emailobfuscate.bash nevergonnagiveyouup@example.com
+}}}
+
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
