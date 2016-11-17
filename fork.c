@@ -38,18 +38,64 @@
  * v0.02 2016-10-27
  *     - (Near) complete rewrite
  *     - Made more portable (Solaris etc)
+ * v0.02 2016-11-17
+ *     - Added help
  */
 
-/* fork's an application, disconnected from the terminal
- * ("similar to 'nohup blah &>/dev/null </dev/null &' but
- * without the job" according to creator).
- *
- * Originally created by Storlek of freenode.net/#ArchLinux
- */
 #include <errno.h> /* errno */
 #include <stdio.h> /* fprintf, perror */
 #include <unistd.h> /* _exit, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO */
 #include <signal.h> /* sigaction, SIGHUP, SIG_IGN */
+
+#define APP_NAME                    "fork"
+#define APP_VERSION                 "0.03"
+#define APP_SUMMARY                 "Spawns a process that's COMPLETELY disconnected from the original parent process"
+#define BIN_NAME                    "fork"
+#define APP_AUTHOR                  "Todd Harbour"
+#define APP_COPYRIGHT               "Copyright (C) 2016 "APP_AUTHOR
+#define APP_URL                     "https://gitlab.com/krayon/qdnxtools/"
+
+// TODO: i18n
+#define _(STRING)                   STRING
+
+static void help_version(void) {
+    printf("%s v%s\n", (APP_NAME), (APP_VERSION));
+    printf("%s\n", (APP_COPYRIGHT));
+    printf("%s\n", (APP_URL));
+}
+
+static void help_usage(void) {
+    printf("\
+\n\
+%s\n\
+\n\
+%s: %s -h|--help\n\
+       %s -V|--version\n\
+       %s [--] <program> [<args> [...]]\n\
+\n\
+-h|--help               - %s\n\
+-V|--version            - %s %s %s\n\
+\n\
+[--]                    - %s\n\
+<program>               - %s\n\
+<args> [...]            - %s\n\
+\n\
+%s: %s youtube-dl https://www.youtube.com/watch?v=dQw4w9WgXcQ\n\
+",
+     _(APP_SUMMARY)
+
+    ,_("Usage"),    BIN_NAME /* -h|--h[elp] */
+    ,               BIN_NAME /* -V|--v[ersion] */
+    ,               BIN_NAME /* -s|--s[elect] ... */
+
+    ,_("Displays this help")
+    ,_("Displays"), APP_NAME, _("version")
+    ,_("Indicates all remaining parameters are for <program>")
+    ,_("Program to run")
+    ,_("Any arguments to pass to <program>")
+    ,_("Example"),  BIN_NAME
+    );
+}
 
 /* Not all systems implement daemon (Solaris, I'm looking at you) */
 int daemon(int nochdir, int noclose) {
@@ -115,9 +161,34 @@ int daemon(int nochdir, int noclose) {
 }
 
 int main(int argc, char **argv) {
+    int argoff = 1;
+
     if (argc < 2) {
-        fprintf(stderr, "usage: fork PROGRAM [args...]\n");
+        fprintf(stderr, "ERROR: No program specified\n");
+        help_version();
+        help_usage();
         _exit(1);
+    }
+
+    if (
+           strcmp("--help", argv[argoff]) == 0
+        || strcmp("-h",     argv[argoff]) == 0
+    ) {
+        help_version();
+        help_usage();
+        _exit(0);
+    }
+
+    if (
+           strcmp("--version", argv[argoff]) == 0
+        || strcmp("-V",        argv[argoff]) == 0
+    ) {
+        help_version();
+        _exit(0);
+    }
+
+    if (strcmp("--", argv[argoff]) == 0) {
+        ++argoff;
     }
 
     /* daemon(nochdir, noclose)
@@ -129,7 +200,7 @@ int main(int argc, char **argv) {
     /* Run the program (this exec's overwrites this process, which
      * therefore no longer exists.
      */
-    execvp(argv[1], argv + 1);
+    execvp(argv[argoff], argv + argoff);
 
     /* If we get here the exec failed so we need to print out the
      * error info and return 255.
