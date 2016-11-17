@@ -5,4 +5,11 @@
 This repository contains a small collection of tools I use on a day to day
 basis that are too small or basic to warrant their own repository.
 
+== Availability ==
+
+These tools are available on [[https://gitlab.com/krayon/ratslap|GitLab]],
+[[https://github.com/krayon/ratslap|GitHub]] and
+[[https://bitbucket.org/krayonx/ratslap|BitBucket]] with the primary repository
+being [[https://gitlab.com/krayon/ratslap|GitLab]].
+
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
