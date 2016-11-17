@@ -139,7 +139,7 @@ EOF
 
 # Output configuration file
 function output_config() {
-    cat "emailobfuscate.bash"|\
+    cat "${0}"|\
          grep -A999 '# \[ CONFIG_START'\
         |grep -v    '# \[ CONFIG_START'\
         |grep -B999 '# \] CONFIG_END'  \
@@ -152,7 +152,7 @@ function decho() {
     # Not debugging, get out of here then
     [ ${DEBUG} -le 0 ] && return
 
-    echo "DEBUG: ${@}" >&2
+    echo "[$(date +'%Y-%m-%d %H:%M')] DEBUG: ${@}" >&2
 }
 
 # Encode URLs
@@ -256,7 +256,7 @@ while [ ${#} -gt 0 ]; do #{
                 exit ${ERR_NONE}
             ;;
 
-            # Version # -C|--configuration
+            # Configuration output # -C|--configuration
             -C|--configuration)
                 decho "Configuration"
 
