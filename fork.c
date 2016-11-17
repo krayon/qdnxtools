@@ -27,9 +27,11 @@
  * Storlek of irc://irc.freenode.net/#ArchLinux
  */
 
-/* fork's an application, disconnected from the terminal
- * ("similar to 'nohup blah &>/dev/null </dev/null &' but
- * without the job").
+/* Spawns a process that's COMPLETELY disconnected from the original parent
+ * process
+ *
+ * TO BUILD:
+ *     gcc -o fork fork.c
  */
 
 /*
@@ -42,8 +44,9 @@
  *     - Added help
  */
 
-#include <errno.h> /* errno */
-#include <stdio.h> /* fprintf, perror */
+#include <errno.h>  /* errno */
+#include <stdio.h>  /* fprintf, perror */
+#include <string.h> /* strcmp */
 #include <unistd.h> /* _exit, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO */
 #include <signal.h> /* sigaction, SIGHUP, SIG_IGN */
 
