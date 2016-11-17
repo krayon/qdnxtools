@@ -54,10 +54,16 @@ URL Encode (urlencode) encodes a URL, obeying RFC3986 (similar to PHP's rawurlen
 
 Usage: urlencode.bash -h|--help
        urlencode.bash -V|--version
+       urlencode.bash -C|--configuration
        urlencode.bash [-v|--verbose] [-f|--filepath] [-a|--all] [--] [-|<URL>]
 
 -h|--help           - Displays this help
 -V|--version        - Displays the program version
+-C|--configuration  - Outputs the default configuration that can be placed in
+                          /etc/urlencode.conf
+                      or
+                          /home/user/.urlencoderc
+                      for editing.
 -v|--verbose        - Displays extra debugging information.  This is the same
                       as setting DEBUG=1 in your config.
 -f|--filepath       - Informs urlencode.bash that the URL(s) are file paths and urlencode.bash
@@ -86,10 +92,16 @@ gathering web scrapers.
 
 Usage: emailobfuscate.bash -h|--help
        emailobfuscate.bash -V|--version
+       emailobfuscate.bash -C|--configuration
        emailobfuscate.bash [-v|--verbose] [-n|--nolink] [--] [-|<ADDY>]
 
 -h|--help           - Displays this help
 -V|--version        - Displays the program version
+-C|--configuration  - Outputs the default configuration that can be placed in
+                          /etc/emailobfuscate.conf
+                      or
+                          /home/user/.emailobfuscaterc
+                      for editing.
 -v|--verbose        - Displays extra debugging information.  This is the same
                       as setting DEBUG=1 in your config.
 -n|--nolink         - Don't output an HTML mailto: link, only the address

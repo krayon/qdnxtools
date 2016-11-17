@@ -32,6 +32,15 @@ _HOME_CONF="${HOME}/.urlencoderc"
 
 
 
+############### STOP ###############
+#
+# Do NOT edit the CONFIGURATION below. Instead generate the default
+# configuration file in your home directory thusly:
+#
+#     ./urlencode.bash -C >~/.urlencoderc
+#
+####################################
+
 # [ CONFIG_START
 
 # URL Encode Default Configuration
@@ -103,10 +112,16 @@ ${APP_NAME} encodes a URL, obeying RFC3986 (similar to PHP's rawurlencode)
 
 Usage: ${PROG} -h|--help
        ${PROG} -V|--version
+       ${PROG} -C|--configuration
        ${PROG} [-v|--verbose] [-f|--filepath] [-a|--all] [--] [-|<URL>]
 
 -h|--help           - Displays this help
 -V|--version        - Displays the program version
+-C|--configuration  - Outputs the default configuration that can be placed in
+                          ${_ETC_CONF}
+                      or
+                          ${_HOME_CONF}
+                      for editing.
 -v|--verbose        - Displays extra debugging information.  This is the same
                       as setting DEBUG=1 in your config.
 -f|--filepath       - Informs ${PROG} that the URL(s) are file paths and ${PROG}
@@ -120,6 +135,16 @@ Usage: ${PROG} -h|--help
 
 Example: ${PROG} "http://www.google.com.au/search?btnI&q=youtube dQw4w9WgXcQ"
 EOF
+}
+
+# Output configuration file
+function output_config() {
+    cat "emailobfuscate.bash"|\
+         grep -A999 '# \[ CONFIG_START'\
+        |grep -v    '# \[ CONFIG_START'\
+        |grep -B999 '# \] CONFIG_END'  \
+        |grep -v    '# \] CONFIG_END'  \
+    #
 }
 
 # Debug echo
@@ -228,6 +253,14 @@ while [ ${#} -gt 0 ]; do #{
                 decho "Version"
 
                 show_version
+                exit ${ERR_NONE}
+            ;;
+
+            # Version # -C|--configuration
+            -C|--configuration)
+                decho "Configuration"
+
+                output_config
                 exit ${ERR_NONE}
             ;;
 

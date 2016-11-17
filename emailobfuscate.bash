@@ -33,6 +33,15 @@ _HOME_CONF="${HOME}/.emailobfuscaterc"
 
 
 
+############### STOP ###############
+#
+# Do NOT edit the CONFIGURATION below. Instead generate the default
+# configuration file in your home directory thusly:
+#
+#     ./emailobfuscate.bash -C >~/.emailobfuscaterc
+#
+####################################
+
 # [ CONFIG_START
 
 # E-mail Obfuscate Default Configuration
@@ -101,10 +110,16 @@ gathering web scrapers.
 
 Usage: ${PROG} -h|--help
        ${PROG} -V|--version
+       ${PROG} -C|--configuration
        ${PROG} [-v|--verbose] [-n|--nolink] [--] [-|<ADDY>]
 
 -h|--help           - Displays this help
 -V|--version        - Displays the program version
+-C|--configuration  - Outputs the default configuration that can be placed in
+                          ${_ETC_CONF}
+                      or
+                          ${_HOME_CONF}
+                      for editing.
 -v|--verbose        - Displays extra debugging information.  This is the same
                       as setting DEBUG=1 in your config.
 -n|--nolink         - Don't output an HTML mailto: link, only the address
@@ -115,6 +130,16 @@ Usage: ${PROG} -h|--help
 
 Example: ${PROG} nevergonnagiveyouup@example.com
 EOF
+}
+
+# Output configuration file
+function output_config() {
+    cat "emailobfuscate.bash"|\
+         grep -A999 '# \[ CONFIG_START'\
+        |grep -v    '# \[ CONFIG_START'\
+        |grep -B999 '# \] CONFIG_END'  \
+        |grep -v    '# \] CONFIG_END'  \
+    #
 }
 
 # Debug echo
@@ -212,6 +237,14 @@ while [ ${#} -gt 0 ]; do #{
                 decho "Version"
 
                 show_version
+                exit ${ERR_NONE}
+            ;;
+
+            # Version # -C|--configuration
+            -C|--configuration)
+                decho "Configuration"
+
+                output_config
                 exit ${ERR_NONE}
             ;;
 
