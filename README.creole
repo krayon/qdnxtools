@@ -12,4 +12,13 @@ These tools are available on [[https://gitlab.com/krayon/ratslap|GitLab]],
 [[https://bitbucket.org/krayonx/ratslap|BitBucket]] with the primary repository
 being [[https://gitlab.com/krayon/ratslap|GitLab]].
 
+== Tools ==
+
+=== fork.c ===
+
+//[[fork.c|fork]]// is a small program designed for spawning processes that are
+completely disconnected from the original parent (ie, your shell).
+
+Think //[[https://linux.die.net/man/1/nohup|nohup(1)]]// on steroids.
+
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
