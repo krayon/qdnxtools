@@ -78,7 +78,7 @@ Usage: urlencode.bash -h|--help
 Example: urlencode.bash "http://www.google.com.au/search?btnI&q=youtube dQw4w9WgXcQ"
 }}}
 
-=== E-mail Obfuscate ===
+=== emailobfuscate.bash ===
 
 E-mail Obfuscater
 {{{
@@ -111,6 +111,21 @@ Usage: emailobfuscate.bash -h|--help
                       read from stdin
 
 Example: emailobfuscate.bash nevergonnagiveyouup@example.com
+}}}
+
+=== xmodkeys_release.bash ===
+
+XModKeys Relesae
+{{{
+A simple script to release any X modifier keys that are currently pressed.
+Occasionally, when using synergy ( https://symless.com/synergy/ |
+https://github.com/symless/synergy ) I find that a modifier is showing as
+pressed when it isn't. This tool can release it for you (requires xdotool)
+
+Usage:
+    Easiest way to use it is probably to SSH into the afflicted machine, and
+    run (assuming your DISPLAY is :0.0):
+        DISPLAY=:0.0 xmodkeys_release
 }}}
 
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
