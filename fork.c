@@ -4,7 +4,7 @@
 
 /**********************************************************************
     fork
-    Copyright (C) 2016 Todd Harbour
+    Copyright (C) 2016-2017 Todd Harbour
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -40,8 +40,11 @@
  * v0.02 2016-10-27
  *     - (Near) complete rewrite
  *     - Made more portable (Solaris etc)
- * v0.02 2016-11-17
+ * v0.03 2016-11-17
  *     - Added help
+ * v0.04 2017-02-28
+ *     - Added check for daemon return value (thanks to nimaje of
+ *       irc://irc.freenode.net/#i3 for pointing it out)
  */
 
 #include <errno.h>  /* errno */
@@ -51,11 +54,11 @@
 #include <signal.h> /* sigaction, SIGHUP, SIG_IGN */
 
 #define APP_NAME                    "fork"
-#define APP_VERSION                 "0.03"
+#define APP_VERSION                 "0.04"
 #define APP_SUMMARY                 "Spawns a process that's COMPLETELY disconnected from the original parent process"
 #define BIN_NAME                    "fork"
 #define APP_AUTHOR                  "Todd Harbour"
-#define APP_COPYRIGHT               "Copyright (C) 2016 "APP_AUTHOR
+#define APP_COPYRIGHT               "Copyright (C) 2016-2017 "APP_AUTHOR
 #define APP_URL                     "https://gitlab.com/krayon/qdnxtools/"
 
 // TODO: i18n
@@ -120,7 +123,16 @@ int daemon(int nochdir, int noclose) {
      *     * Starts a new session with us as leader;
      *     * Starts a new process group, with us as process group leader.
      */
-    if (setsid() == -1) return -1;
+    /* FIXME:
+     * According to setsid(2):
+     *     EPERM - The process group ID of any process equals the PID of
+     *     the calling process. Thus, in particular, setsid() fails if the
+     *     calling process is already a process group leader.
+     *
+     * Is it therefore reasonable to ignore the setsid return value as it
+     * seems it would only fail when our objective is ALREADY true?
+     */
+    if (setsid() == -1) return -2;
 
     /* 3. Ignore parent SIGHUP:
      *     When we fork again, the parent (who will be the session leader)
@@ -165,6 +177,7 @@ int daemon(int nochdir, int noclose) {
 
 int main(int argc, char **argv) {
     int argoff = 1;
+    int ret;
 
     if (argc < 2) {
         fprintf(stderr, "ERROR: No program specified\n");
@@ -198,7 +211,11 @@ int main(int argc, char **argv) {
      *   If nochdir != 0, don't 'chdir /'
      *   If noclose != 0, don't redirect stdin/out/err to '/dev/null'
      */
-    daemon(1, 0);
+    if ((ret = daemon(1, 0)) < 0) {
+        if (ret == -1) perror("fork");
+        if (ret == -2) perror("setsid");
+        _exit(255);
+    }
 
     /* Run the program (this exec's overwrites this process, which
      * therefore no longer exists.

@@ -22,8 +22,8 @@ completely disconnected from the original parent (ie, your shell).
 Think //[[https://linux.die.net/man/1/nohup|nohup(1)]]// on steroids.
 
 {{{
-fork v0.03
-Copyright (C) 2016 Todd Harbour
+fork v0.04
+Copyright (C) 2016-2017 Todd Harbour
 https://gitlab.com/krayon/qdnxtools/
 
 Spawns a process that's COMPLETELY disconnected from the original parent process
