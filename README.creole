@@ -19,7 +19,8 @@ being [[https://gitlab.com/krayon/ratslap|GitLab]].
 //[[fork.c|fork]]// is a small program designed for spawning processes that are
 completely disconnected from the original parent (ie, your shell).
 
-Think //[[https://linux.die.net/man/1/nohup|nohup(1)]]// on steroids.
+Think //[[https://linux.die.net/man/1/nohup|nohup(1)]]// on steroids (with some
+other minor advantages).
 
 {{{
 fork v0.04
@@ -126,6 +127,24 @@ Usage:
     Easiest way to use it is probably to SSH into the afflicted machine, and
     run (assuming your DISPLAY is :0.0):
         DISPLAY=:0.0 xmodkeys_release
+}}}
+
+=== magpidl.bash ===
+
+MagPi Magazine Downloader
+{{{
+A simple script to download the MagPi magazines you don't have.
+
+Usage:
+    $ ./magpidl.bash
+
+    Last downloaded issue is 55 for 2017-03
+    Downloading issue 56 (2017-04)...
+
+    $ ./magpidl.bash
+
+    Last downloaded issue is 56 for 2017-04
+    Up to date, nothing to download
 }}}
 
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
