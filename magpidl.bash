@@ -29,10 +29,16 @@
 urlbase="http://www.raspberrypi.org/magpi-issues/MagPi%issue%.pdf"
 
 nowish="$(date +%Y-%m)"
-last="$(ls -1 Issue*pdf|tail -1)"
-i="${last#*_}"; i="${i%%_*}"
-d="${last##*_}"; d="${d%.*}"
-echo "Last downloaded issue is $i for $d"
+list="$(ls -1 Issue*pdf 2>/dev/null)" && {
+    last="$(echo "${list}"|tail -1)"
+    i="${last#*_}"; i="${i%%_*}"
+    d="${last##*_}"; d="${d%.*}"
+    echo "Last downloaded issue is $i for $d"
+} || {
+    # Haven't downloaded any yet, so start at the first issue
+    i=0
+    d="2013-04"
+}
 
 [ "${d}" == "${nowish}" ] && {
     echo "Up to date, nothing to download"
@@ -40,11 +46,12 @@ echo "Last downloaded issue is $i for $d"
 }
 
 while [ "${d}" != "${nowish}" ]; do #{
-    i=$((${i} + 1))
+    i=$((${i} + 1)); ii=$i
+    [ ${#ii} -lt 2 ] && ii="0${ii}"
     d="$(date -d "${d}-01 + 1 month" +%Y-%m)"
-    newfile="Issue_${i}_-_${d}.pdf"
-    url="${urlbase/\%issue\%/${i}}"
+    newfile="Issue_${ii}_-_${d}.pdf"
+    url="${urlbase/\%issue\%/${ii}}"
 
-    echo "Downloading issue ${i} ($d)..."
+    echo "Downloading issue ${ii} ($d)..."
     wget -q -c -O "${newfile}" "${url}"
 done #}
