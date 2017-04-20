@@ -31,8 +31,13 @@ urlbase="http://www.raspberrypi.org/magpi-issues/MagPi%issue%.pdf"
 nowish="$(date +%Y-%m)"
 list="$(ls -1 Issue*pdf 2>/dev/null)" && {
     last="$(echo "${list}"|tail -1)"
+
+    # Get issue number
     i="${last#*_}"; i="${i%%_*}"
+
+    # Get issue date
     d="${last##*_}"; d="${d%.*}"
+
     echo "Last downloaded issue is $i for $d"
 } || {
     # Haven't downloaded any yet, so start at the first issue
@@ -40,6 +45,10 @@ list="$(ls -1 Issue*pdf 2>/dev/null)" && {
     d="2013-04"
 }
 
+# Remove issue number leading zero (if present)
+[ "${i:0:1}" == "0" ] && i="${i:1}"
+
+# If we've already got this months
 [ "${d}" == "${nowish}" ] && {
     echo "Up to date, nothing to download"
     exit 0
