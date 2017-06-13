@@ -35,13 +35,16 @@ EOF
     }
 
     # If first param is NULL, obviously the output will be nothing
-    [ -z "${1}" ] && return 0
+    [ -z "${1}" ] && echo && return 0
 
     # Second param must be a number
     [ "${2}" -eq "${2}" ] &>/dev/null || {
         echo >&2 "ERROR: Invalid <num>: ${2}"
         return 1
     }
+
+    # If second param is a zero, obviously the output will be nothing
+    [ "${2}" -eq 0 ] && echo && return 0
 
     printf "${1}%.0s" $(eval echo "{1..${2}}")
     echo
