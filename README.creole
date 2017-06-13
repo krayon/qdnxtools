@@ -116,7 +116,7 @@ Example: emailobfuscate.bash nevergonnagiveyouup@example.com
 
 === xmodkeys_release.bash ===
 
-XModKeys Relesae
+XModKeys Release
 {{{
 A simple script to release any X modifier keys that are currently pressed.
 Occasionally, when using synergy ( https://symless.com/synergy/ |
