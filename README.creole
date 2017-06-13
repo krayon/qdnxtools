@@ -153,6 +153,8 @@ Rep(eat) Char(acter)
 {{{
 Repeats a given character (or string) a specified number of times.
 
+Can be run directly or sourced ( . "repchar.bash" ).
+
 Usage: repchar.bash -h|--help
        repchar.bash <char> <count>
 
@@ -160,7 +162,7 @@ Usage: repchar.bash -h|--help
 <char>              - Character (or string) to repeat.
 <count>             - Number of times to repeat <char>.
 
-Example: = 10
+Example: repchar.bash = 10
 =========
 }}}
 
