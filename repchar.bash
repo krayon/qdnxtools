@@ -21,13 +21,22 @@ EOF
     exit 0
 }
 
-[ ${#} -ne 2 ] && echo >&2 "ERROR: Invalid number of parameters" && exit 1
+# If first param is NULL, obviously the output will be nothing
+[ -z "${1}" ] && exit 0
 
-i=1
-while [ ${i} -lt ${2} ]; do #{
-    echo -n "${1}"
-    i=$((${i} + 1))
-done #}
+# Expecting 2 params
+[ ${#} -ne 2 ] && {
+    echo >&2 "ERROR: Invalid number of parameters"
+    exit 1
+}
+
+# Second param must be a number
+[ "${2}" -eq "${2}" ] &>/dev/null || {
+    echo >&2 "ERROR: Invalid <num>: ${2}"
+    exit 1
+}
+
+printf "${1}%.0s" $(eval echo "{1..${2}}")
 echo
 
 # vim:ts=4:sw=4:et:ai:si
