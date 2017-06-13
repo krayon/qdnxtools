@@ -147,4 +147,21 @@ Usage:
     Up to date, nothing to download
 }}}
 
+=== repchar.bash ===
+
+Rep(eat) Char(acter)
+{{{
+Repeats a given character (or string) a specified number of times.
+
+Usage: repchar.bash -h|--help
+       repchar.bash <char> <count>
+
+-h|--help           - Displays this help
+<char>              - Character (or string) to repeat.
+<count>             - Number of times to repeat <char>.
+
+Example: = 10
+=========
+}}}
+
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
