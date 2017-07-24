@@ -48,3 +48,8 @@ function getmodifierlist() {
 
 # Do it
 getmodifierlist|xargs xdotool keyup
+
+# Mouse buttons too
+for b in {1..5}; do #{
+    xdotool mouseup ${b}
+done #}
