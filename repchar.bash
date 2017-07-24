@@ -46,7 +46,7 @@ EOF
     # If second param is a zero, obviously the output will be nothing
     [ "${2}" -eq 0 ] && echo && return 0
 
-    printf "${1}%.0s" $(eval echo "{1..${2}}")
+    printf "%.0s${1}" $(eval echo "{1..${2}}")
     echo
 } # repchar
 
