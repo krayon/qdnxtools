@@ -1,10 +1,10 @@
 #!/bin/bash
-# vim:set tabstop=4 textwidth=80 shiftwidth=4 expandtab cindent cino=(0,ml,\:0:
+# vim:set ts=4 sw=4 tw=80 et ai si:
 # ( settings from: http://datapax.com.au/code_conventions/ )
 #
 #/**********************************************************************
 #    URL Encode
-#    Copyright (C) 2016 Todd Harbour
+#    Copyright (C) 2016-2017 Todd Harbour
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License

@@ -56,4 +56,4 @@ EOF
 # We are being run as a script
 repchar "${@}"; exit $?
 
-# vim:ts=4:sw=4:et:ai:si
+# vim:ts=4:sw=4:tw=80:et:ai:si

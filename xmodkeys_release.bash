@@ -1,5 +1,5 @@
 #!/bin/bash
-# vim:set tabstop=4 textwidth=80 shiftwidth=4 expandtab cindent cino=(0,ml,\:0:
+# vim:set ts=4 sw=4 tw=80 et ai si:
 # ( settings from: http://datapax.com.au/code_conventions/ )
 #
 #/**********************************************************************
