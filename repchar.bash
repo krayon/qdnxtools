@@ -43,10 +43,13 @@ EOF
         return 1
     }
 
-    # If second param is a zero, obviously the output will be nothing
-    [ "${2}" -eq 0 ] && echo && return 0
+    # Raw that number (strip of extras)
+    num=$((${2} + 0))
 
-    printf "%.0s${1}" $(eval echo "{1..${2}}")
+    # If second param is a zero, obviously the output will be nothing
+    [ "${num}" -eq 0 ] && echo && return 0
+
+    printf "%.0s${1}" $(eval echo "{1..${num}}")
     echo
 } # repchar
 
