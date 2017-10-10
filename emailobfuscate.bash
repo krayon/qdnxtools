@@ -168,7 +168,7 @@ function encodeaddy() {
 
     out=""
     for (( i = 0; i < ${#addy}; ++i )); do #{
-        out="${out}$(printf '&#x%.4X' "'${addy:${i}:1}'")"
+        out="${out}$(printf '&#x%.4X;' "'${addy:${i}:1}'")"
     done #}
 
     echo "${out}"
