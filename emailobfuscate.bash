@@ -39,6 +39,8 @@ _HOME_CONF="${HOME}/.emailobfuscaterc"
 # configuration file in your home directory thusly:
 #
 #     ./emailobfuscate.bash -C >~/.emailobfuscaterc
+# or system wide:
+#     ./emailobfuscate.bash -C >/etc/emailobfuscate.conf
 #
 ####################################
 
@@ -134,12 +136,7 @@ EOF
 
 # Output configuration file
 function output_config() {
-    cat "${0}"|\
-         grep -A999 '# \[ CONFIG_START'\
-        |grep -v    '# \[ CONFIG_START'\
-        |grep -B999 '# \] CONFIG_END'  \
-        |grep -v    '# \] CONFIG_END'  \
-    #
+    sed -n '/^# \[ CONFIG_START/,/^# \] CONFIG_END/p' <"${0}"
 }
 
 # Debug echo

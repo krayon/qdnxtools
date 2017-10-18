@@ -38,6 +38,8 @@ _HOME_CONF="${HOME}/.urlencoderc"
 # configuration file in your home directory thusly:
 #
 #     ./urlencode.bash -C >~/.urlencoderc
+# or system wide:
+#     ./urlencode.bash -C >/etc/urlencode.conf
 #
 ####################################
 
@@ -139,12 +141,7 @@ EOF
 
 # Output configuration file
 function output_config() {
-    cat "${0}"|\
-         grep -A999 '# \[ CONFIG_START'\
-        |grep -v    '# \[ CONFIG_START'\
-        |grep -B999 '# \] CONFIG_END'  \
-        |grep -v    '# \] CONFIG_END'  \
-    #
+    sed -n '/^# \[ CONFIG_START/,/^# \] CONFIG_END/p' <"${0}"
 }
 
 # Debug echo
