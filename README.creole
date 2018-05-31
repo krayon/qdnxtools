@@ -166,4 +166,33 @@ Example: repchar.bash = 10
 =========
 }}}
 
+=== icalparse.bash ===
+
+An iCal parser, useful for viewing calendar invites that arrive in email from
+text mail clients such as mutt.
+
+Simply add something like the following to your mutt mailcap (such as
+~/.mutt/mailcap):
+{{{
+# iCal Calendar
+text/calendar;               ~/bin/icalparse %s; copiousoutput
+}}}
+
+iCal Parse
+{{{
+iCal Parse (icalparse) parses an iCal file, displaying a summary.
+
+Usage: icalparse.bash -h|--help
+       icalparse.bash -V|--version
+       icalparse.bash [-v|--verbose] <file>
+
+-h|--help           - Displays this help
+-V|--version        - Displays the program version
+-v|--verbose        - Displays extra debugging information.  This is the same
+                      as setting DEBUG=1 in your config.
+<file>              - The calendar file to parse.
+
+Example: icalparse.bash appointment.ics
+}}}
+
 <<< vim:set ts=4 sw=4 tw=80 et cindent ai si syn=creole: >>>
