@@ -196,7 +196,7 @@ function loadtimezones() {
             && [ ! -z "${tzid}"  ]\
             && [ ! -z "${tzoff}" ]\
             && {
-                tz[${tzid//[ \/]/_}]="${tzoff}"
+                tz[${tzid//[ \/\.]/_}]="${tzoff}"
 
                 decho "SET TZ: \"${tzid}\" = ${tzoff}"
             }
@@ -329,12 +329,12 @@ EOF
                         ctz="${ctz##*=}"
 
                         decho "${key%%;*}:TZ: ${ctz}"
-                        [ -z "${tz[${ctz//[ \/]/_}]}" ] && {
+                        [ -z "${tz[${ctz//[ \/\.]/_}]}" ] && {
                             echo >&2 "ERROR: Unknown timezone for ${key%%;*}: ${ctz}"
                             ctz=""
                         } || {
                             decho "- FOUND TZ: ${ctz}"
-                            ctz="${tz[${ctz//[ \/]/_}]}"
+                            ctz="${tz[${ctz//[ \/\.]/_}]}"
                         }
                     }
                 done #}
