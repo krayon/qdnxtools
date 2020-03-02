@@ -77,6 +77,9 @@ EOF
     # If second param is a zero, obviously the output will be nothing
     [ "${num}" -eq 0 ] && echo && return 0
 
+    # man printf says: The format is reused as necessary to consume all of
+    #                  the arguments.
+    # given that "%.0s" prints NOTHING, all you're left with is ${num} ${1}'s
     printf "%.0s${1}" $(eval echo "{1..${num}}")
     echo
 } # repchar
