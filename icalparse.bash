@@ -4,7 +4,7 @@
 #
 #/**********************************************************************
 #    iCalParse
-#    Copyright (C) 2016-2018 Todd Harbour
+#    Copyright (C) 2016-2020 Todd Harbour
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -57,12 +57,12 @@ DEBUG=0
 
 # Version
 APP_NAME="iCal Parse (icalparse)"
-APP_VER="0.01"
+APP_VER="0.02"
 #TODO:
 #APP_URL="http://www.datapax.com.au/icalparse/"
 
 # Program name
-PROG="$(basename "${0}")"
+PROG="${0##*/}"
 
 # exit condition constants
 ERR_NONE=0
@@ -75,21 +75,61 @@ ERR_MISSINGPARAM=4
 files=()
 
 
+# Params:
+#   $1 =  (s) command to look for
+#   $2 =  (s) complete path to binary
+#   $3 =  (i) print error (1 = yes, 0 = no)
+#   $4 = [(s) suspected package name]
+# Outputs:
+#   Path to command, if found
+# Returns:
+#   $ERR_NONE
+#   -or-
+#   $ERR_MISSINGDEP
+check_for_cmd() {
+    # Check for ${1} command
+    local ret=${ERR_NONE}
+    local path=""
+    local cmd="${1}"; shift 1
+    local bin="${1}"; shift 1
+    local msg="${1}"; shift 1
+    local pkg="${1}"; shift 1
+    [ -z "${pkg}" ] && pkg="${cmd}"
+
+    path="$(type -P "${bin}" 2>&1)" || {
+        # Not found
+        ret=${ERR_MISSINGDEP}
+
+        [ "${msg}" -eq 1 ] &>/dev/null && {
+
+cat <<EOF >&2
+ERROR: Cannot find ${cmd}${bin:+ (as }${bin}${bin:+)}.  This is required.
+Ensure you have ${pkg} installed or search for ${cmd}
+in your distribution's packages.
+EOF
+
+            return ${ret}
+        }
+    }
+
+    [ ! -z "${path}" ] && echo "${path}"
+
+    return ${ret}
+} # check_for_cmd()
 
 # Params:
 #   NONE
-function show_version() {
+show_version() {
     echo -e "\
 ${APP_NAME} v${APP_VER}\n\
 ${APP_URL}\n\
 "
-}
+} # show_version()
 
 # Params:
 #   NONE
-function show_usage() {
+show_usage() {
     show_version
-
 cat <<EOF
 
 ${APP_NAME} parses an iCal file, displaying a summary.
@@ -106,49 +146,29 @@ Usage: ${PROG} -h|--help
 
 Example: ${PROG} appointment.ics
 EOF
-
-}
-
-# Params:
-#   $1 =  (s) command to look for
-#   $2 = [(s) suspected package name]
-function check_for_cmd() {
-    # Check for ${1} command
-    cmd="UNKNOWN"
-    [ $# -gt 0 ] && cmd="${1}" && shift 1
-    pkg="${cmd}"
-    [ $# -gt 0 ] && pkg="${1}" && shift 1
-
-    which "${cmd}" >/dev/null 2>&1 || {
-cat >&2 <<EOF
-ERROR: Cannot find ${cmd}.  This is required.
-Ensure you have ${pkg} installed or search for ${cmd}
-in your distribution's packages.
-EOF
-
-        exit ${ERR_MISSINGDEP}
-    }
-
-    return ${ERR_NONE}
-}
+} # show_usage()
 
 # Debug echo
-function decho() {
+decho() {
+    local line
+
     # Not debugging, get out of here then
     [ ${DEBUG} -le 0 ] && return
 
-    echo >&2 "DEBUG: ${@}"
-}
+    while read -r line; do #{
+        >&2 echo "[$(date +'%Y-%m-%d %H:%M')] DEBUG: ${line}"
+    done< <(echo "${@}") #}
+} # decho()
 
-function elpush() {
+elpush() {
     decho "ELPUSH: ${1}"
 
     [ "${1%%:*}" != "BEGIN" ] && return 1
 
     stack+=("${1#*:}")
-}
+} # elpush()
 
-function elpop() {
+elpop() {
     decho "ELPOP : ${1}"
 
     [ "${1%%:*}" != "END" ] && return 1
@@ -156,9 +176,9 @@ function elpop() {
     [ "${stack[$(( ${#stack[@]} - 1 ))]}" != "${1#*:}" ] && return 2
 
     unset stack[${#stack[@]}]
-}
+} # elpop()
 
-function demultiline() {
+demultiline() {
     awk \
 '
 BEGIN { ORS=""; }                    # default: no newline between output records
@@ -167,10 +187,10 @@ NR==1 { print; next; }               # first line: print
 { sub(/^ /, ""); print; }            # other lines (next; has not been called yet)
 '
 
-}
+} # demultiline()
 
 # Load timezones
-function loadtimezones() {
+loadtimezones() {
     read -r line
 
     [ "${line}" != "BEGIN:VCALENDAR" ] && {
@@ -228,10 +248,10 @@ function loadtimezones() {
             continue
         }
     done #}
-}
+} # loadtimezones()
 
 # Load calendar events
-function loadevents() {
+loadevents() {
     summ=""
     loc=""
 
@@ -360,7 +380,7 @@ EOF
         }
 
     done #}
-}
+} # loadevents()
 
 
 
