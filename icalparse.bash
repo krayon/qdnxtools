@@ -339,13 +339,16 @@ EOF
                     }
                 done #}
 
-                tmp="$(date -d "
-                    ${value:0:4}-${value:4:2}-${value:6:2}\
-                    \
-                    ${value:9:2}:${value:11:2}:${value:13:2}\
-                    \
-                    ${ctz}\
-                " +'%Y-%m-%d %H:%M %z')"
+                # No time specified?
+                [ ${#value} -lt 14 ] && value="${value}T000000"
+
+                tmp="$(date -d "$(echo \
+                        "${value:0:4}-${value:4:2}-${value:6:2}" \
+                        "${value:9:2}:${value:11:2}:${value:13:2}" \
+                        "${ctz}" \
+                        )" \
+                    +'%Y-%m-%d %H:%M %z' \
+                )"
 
                 decho "${key%%;*}: ${tmp}"
 
