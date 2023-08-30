@@ -9,7 +9,7 @@ wait_retry=30
 
 bin="$(basename "${0}")"
 proper_name="WaitForPID"
-ver=0.1
+ver=0.12
 
 # Show Help
 function showhelp {
@@ -19,42 +19,65 @@ ${proper_name} v${ver}\n\
 Waits for a PID.\n\
 \n\
 Usage: ${bin} -h|--help\n\
-Usage: ${bin} <PID>\n\
+Usage: ${bin} <PID> [<PID> [...]]\n\
 \n\
 -h|--help           - Display (this) help\n\
-<PID>               - PID to wait for.\n\
+<PID>               - PID(s) to wait for.\n\
 \n\
-Example: ${bin} 1234\n\
+Example: ${bin} 1234 555\n\
     "
 }
 
 # Checks for number (returns the number if true, NULL otherwise)
 function isanum {
-    echo "$(echo "${1}"|sed '/[^[:digit:]]/d')"
+    [ "${1}" -eq "${1}" 2>/dev/null ] && echo ${1}
 }
 
 # Returns the number of this PID running (0 or 1)
 function pidrunning {
-    echo $(ps -eo pid|sed '/PID/d'|grep -w "${1}"|wc -l)
+    # Doesn't work on N900:
+    #echo $(ps -eo pid|sed '/PID/d'|grep -w "${1}"|wc -l)
+    #OLD: echo $(ps -e|awk '{print $1}'|grep "\<${1}\>"|wc -l)
+    ps -p "${1}" >/dev/null 2>&1
 }
 
 retval=0
 
-if [ "${1}" == "-h" ] || [ "${1}" == "--help" ]; then
-    # Show the help
-    showhelp
-    exit 0
-fi
+pids=()
+forkedpids=()
+pidcount=0
+while [ "${#}" -gt 0 ]; do
+    if [ "${1}" == "-h" ] || [ "${1}" == "--help" ]; then
+        # Show the help
+        showhelp
+        exit 0
+    elif [ -z "${1}" ] || [ -z "$(isanum "${1}")" ]; then
+        echo "ERROR: PID must be a number" >&2
+        showhelp
+        exit 1
+    fi
 
-if [ -z "${1}" ] || [ -z "$(isanum "${1}")" ]; then
-    echo "ERROR: PID must be a number" >&2
+    pids[${pidcount}]=${1}
+    pidcount=$((${pidcount} + 1))
+    shift 1
+done
+
+if [ ${pidcount} -lt 1 ]; then
     showhelp
     exit 1
+elif [ ${pidcount} -gt 1 ]; then
+    for pidid in $(seq 0 $((${pidcount} - 1))); do
+        ${0} ${pids[${pidid}]} & forkedpids[${pidid}]=$!
+    done
+
+    wait
+
+    exit 0
+else
+    pid=${pids[0]}
 fi
 
-pid=${1}
-
-while [ $(pidrunning ${pid}) -ne 0 ]; do
+while pidrunning ${pid}; do
     sleep ${wait_retry}
 done
 exit 0
