@@ -1,10 +1,10 @@
 #!/bin/bash
-# vim:set ts=4 sw=4 tw=80 et ai si:
+# vim:set ts=4 sw=4 tw=80 et ai si cindent cino=L0,b1,(1s,U1,m1,j1,J1,)50,*90 cinkeys=0{,0},0),0],\:,!^F,o,O,e,0=break:
 # ( settings from: http://datapax.com.au/code_conventions/ )
 #
 #/**********************************************************************
 #    MagPi DL
-#    Copyright (C) 2014-2017 Todd Harbour
+#    Copyright (C) 2014-2025 Todd Harbour
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -22,11 +22,32 @@
 #      51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # **********************************************************************/
 
+# date -d "$(wget -q -S --spider https://www.raspberrypi.org/magpi-issues/MagPi56.pdf 2>&1|grep Last-Modified:|cut -d: -f2-) + 1 month" +%Y-%m
+# 2017-04
+
+
 # magpidl
 #--------
 # Downloader for The MagPi Magazine
 
+fileformat="Issue_-_%issue%_-_%date%.pdf"
+
 urlbase="http://www.raspberrypi.org/magpi-issues/MagPi%issue%.pdf"
+
+# grep regex
+gfr="$(echo "${fileformat}"|sed 's#%issue%#\([0-9]\*\)#;s#%date%#\([0-9]\{4\}-[0-9]\{2\}\)#')"
+# sed  regex
+sfr="$(echo "${fileformat}"|sed 's#%issue%#\\([0-9]\*\\)#;s#%date%#\\([0-9]\\{4\\}-[0-9]\\{2\\}\\)#')"
+
+ls -1|egrep "${gfr}"|sed -n 's#'"${sfr}"'#\1 \2#gp'
+
+exit 0
+
+
+
+
+
+
 
 nowish="$(date +%Y-%m)"
 list="$(ls -1 Issue*pdf 2>/dev/null)" && {

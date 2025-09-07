@@ -1,10 +1,10 @@
 #!/bin/bash
-# vim:set ts=4 sw=4 tw=80 et ai si:
+# vim:set ts=4 sw=4 tw=80 et ai si cindent cino=L0,b1,(1s,U1,m1,j1,J1,)50,*90 cinkeys=0{,0},0),0],\:,!^F,o,O,e,0=break:
 # ( settings from: http://datapax.com.au/code_conventions/ )
 #
 #/**********************************************************************
 #    E-mail Obfuscate
-#    Copyright (C) 2011-2017 Todd Harbour
+#    Copyright (C) 2011-2025 Todd Harbour
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License

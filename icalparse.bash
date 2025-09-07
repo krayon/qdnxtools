@@ -1,10 +1,10 @@
 #!/bin/bash
-# vim:set ts=4 sw=4 tw=80 et ai si:
+# vim:set ts=4 sw=4 tw=80 et ai si cindent cino=L0,b1,(1s,U1,m1,j1,J1,)50,*90 cinkeys=0{,0},0),0],\:,!^F,o,O,e,0=break:
 # ( settings from: http://datapax.com.au/code_conventions/ )
 #
 #/**********************************************************************
 #    iCalParse
-#    Copyright (C) 2016-2020 Todd Harbour
+#    Copyright (C) 2016-2025 Todd Harbour
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU General Public License
@@ -38,8 +38,8 @@ _HOME_CONF="${HOME}/.icalparserc"
 # ================================
 
 # DEBUG
-#   This defines debug mode which will output verbose info to stderr
-#   or, if configured, the debug file ( ERROR_LOG ).
+#   This defines debug mode which will output verbose info to stderr or, if
+#   configured, the debug file ( ERROR_LOG ).
 DEBUG=0
 
 # ERROR_LOG
@@ -465,7 +465,7 @@ for f in "${files[@]}"; do #{
     } || {
         decho "PROCESS FILE: ${f}"
         [ ! -r "${f}" ] && {
-            echo >&2 "ERROR: Unable to read file ${f}..."
+            >&2 echo "ERROR: Unable to read file ${f}..."
             continue
         }
         f="$(dos2unix <"${f}"|demultiline)"
