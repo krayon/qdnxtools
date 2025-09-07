@@ -34,7 +34,7 @@ generate_toc() {
     
         echo -n "${h}- "
 
-        echo -n "[${line}]("
+        echo -n "[${line}](#"
     
         sed 's#[^-A-Za-z_0-9 ]##g;s# \+#-#g;s#-\+#-#g;s#.*#\L&#;s#^-##;s#-$##;s#$#)#' <<<"${line}"
     done < <(sed -n '/^#/p') #}
