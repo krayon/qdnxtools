@@ -28,10 +28,15 @@ generate_toc() {
         level=${#lc}
     
         h="${lc//#/  }"; h="${h:2}"
+
+        while [ "${line: -1:1}" == '#' ]; do line="${line:0: -1}"; done
+        while [ "${line: -1:1}" == ' ' ]; do line="${line:0: -1}"; done
     
         echo -n "${h}- "
+
+        echo -n "[${line}]("
     
-        sed 's#[^-A-Za-z_0-9 ]##g;s# \+#-#g;s#-\+#-#g;s#.*#\L&#;s#^-##;s#-$##' <<<"${line}"
+        sed 's#[^-A-Za-z_0-9 ]##g;s# \+#-#g;s#-\+#-#g;s#.*#\L&#;s#^-##;s#-$##;s#$#)#' <<<"${line}"
     done < <(sed -n '/^#/p') #}
 }
 
@@ -43,4 +48,7 @@ mddata="${mddata:0: -1}"
 
 toc="$(generate_toc <<<"${mddata}")"
 
-sed 's#{:toc}#'"${toc//$'\n'/\\n}"'#' <<<"${mddata}"
+#sed 's#{:toc}#'"${toc//$'\n'/\\n}"'#' <<<"${mddata}"
+while IFS='\n' read -r line; do #{
+    [ "${line}" == "{:toc}" ] && echo "${toc}" || echo "${line}"
+done <<<"${mddata}"
